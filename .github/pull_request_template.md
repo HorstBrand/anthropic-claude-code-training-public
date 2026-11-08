@@ -7,6 +7,10 @@ Keep the ticket ID in the title, for example: NWP-101: add export options
 
 Closes NWP-____
 
+## Business impact
+
+<!-- One line, required. Who benefits and how, in business terms. Example: Ops can issue virtual cards themselves instead of waiting on the platform team. -->
+
 ## What changed
 
 <!-- One short paragraph. What does this do that the app could not do before? -->

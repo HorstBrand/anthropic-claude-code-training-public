@@ -15,11 +15,24 @@ No database, no seed step, no Docker.
 
 ## Data lives in memory
 
-Seed data is JSON, loaded into a store module at boot. Route handlers read and write that store.
+Seed data is generated at boot by `src/data/generate.ts` (merchants come from `src/data/merchants.ts`) and held in `src/data/store.ts` on `globalThis`, so dev-server reloads don't reset it. There are no seed JSON files. Route handlers read and write that store.
 
 - Writes last for the life of the dev server and vanish on restart. That is expected.
 - Persistence is tracked separately as NWP-203. **Do not add a database, an ORM, or migrations.**
-- If you need more seed data, add it to the JSON. Never edit seed data to make a failing case disappear.
+- If you need more seed data, extend the generator. Never edit seed data to make a failing case disappear.
+
+## Commands
+
+| | |
+| --- | --- |
+| `npm run dev` | Dev server (store resets on restart) |
+| `npm test` | Vitest, Node environment, no jsdom; picks up `src/**/*.test.ts` only |
+| `npx vitest run src/lib/money.test.ts` | One test file |
+| `npx vitest run -t "<name>"` | Tests matching a name |
+| `npm run lint` | `next lint` |
+| `npx tsc --noEmit` | Typecheck (no script for it) |
+
+Tests run in Node without a DOM. A `.test.tsx` or a component test won't be picked up unless `vitest.config.ts` changes.
 
 ## Where the rest of the context lives
 
@@ -38,7 +51,7 @@ These four explain most of the code, and breaking them is how bugs get in here.
 
 1. **Money is integer minor units.** `$250.00` is `25000`. No floats, no strings with currency symbols. Format once, at the edge, next to its currency code.
 2. **Storage and bucketing are UTC.** Display converts to the merchant's timezone. Nothing else does.
-3. **One query builder.** Payment filtering goes through the builder behind `GET /api/payments`. A second implementation is a bug, not a shortcut.
+3. **One query builder.** `src/data/queries.ts` (`parseFilters`, `filterPayments`, `queryPayments`, `paginate`) backs `GET /api/payments` and every list, export, and metric. A second implementation is a bug, not a shortcut.
 4. **Validate on the server.** Anything from the client — column names, currencies, limits, statuses — is checked against an allowlist before it reaches a query, a filename, or the store.
 
 ## Card rules
@@ -53,7 +66,7 @@ These four explain most of the code, and breaking them is how bugs get in here.
 | --- | --- |
 | `src/app/` | Console routes: overview, payments, disputes, payouts. Cards is NWP-201 and does not exist yet |
 | `src/app/api/` | Route handlers |
-| `src/data/` | Seed JSON, the in-memory store, and types |
+| `src/data/` | Seed generator, the in-memory store, the query builder, and types |
 | `src/components/` | Tremor-based primitives and the console's own components |
 | `src/lib/` | Money, date, and CSV helpers, each with a `.test.ts` beside it. Read these before touching an amount |
 
