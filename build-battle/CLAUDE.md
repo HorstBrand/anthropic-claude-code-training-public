@@ -33,6 +33,12 @@ Taking ticket NWP-201 end to end in a codebase you did not write, in 40 minutes,
 - Never edit seed data to make a failing case disappear
 - No database, no ORM, no migrations. The store is in memory on purpose and persistence is a different ticket
 
+## How it is scored
+
+Rubric weights are in `README.md`. The grader's prompt is `.github/prompts/grade-pr.md`. It reads only the diff (truncated at ~80 KB) and the PR body, so anything not visible there doesn't count.
+
+Note: GitHub runs workflows only from the repository root's `.github/`, where the active reviewer is `anthropic-tenex-reviewer.yml`. `build-battle/.github/workflows/review.yml` does not run from here.
+
 ## Definition of done
 
 A pull request that states what changed, how it was verified, and which acceptance criteria it meets.

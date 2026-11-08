@@ -29,6 +29,7 @@ Do not mark a criterion met because you intended to meet it. If it is half done,
 Use `.github/pull_request_template.md`. Every section, no placeholders left behind.
 
 - **Ticket** — the ID, so it links.
+- **Business impact** — exactly one line, required by the Release Standards. Who benefits and how, in business terms, not technical ones.
 - **What changed** — one short paragraph in plain language. What can the app do now that it could not do before? Not a file list; the diff already is one.
 - **How I verified it** — the commands you ran and what you saw. "Tests pass" is weak. "`npm test` — 12 passing, including the Luhn generator case" is evidence. Name what you clicked and what appeared.
 - **Acceptance criteria** — the checkboxes from the ticket, ticked truthfully, with a note on any that are partial.
